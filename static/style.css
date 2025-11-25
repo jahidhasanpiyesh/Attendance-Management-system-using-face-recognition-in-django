@@ -12,14 +12,15 @@ body, html {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 /* ==================== SIDEBAR ==================== */
 .sidebar {
-    width: 250px;
+    width: 220px;
     height: 100vh;
     background: #11151f;
-    padding: 25px 15px;
+    padding: 20px 15px;
     position: fixed;
     border-right: 2px solid #1f2533;
     transition: 0.3s ease;
@@ -27,8 +28,8 @@ body, html {
 
 .sidebar h2 {
     text-align: center;
-    font-size: 22px;
-    margin-bottom: 22px;
+    font-size: 20px;
+    margin-bottom: 20px;
     font-weight: 600;
     color: #ffeb3b;
     letter-spacing: 1px;
@@ -39,17 +40,17 @@ body, html {
     display: flex;
     align-items: center;
     color: #d8dde8;
-    padding: 12px 14px;
-    margin: 10px 0;
+    padding: 10px 14px;
+    margin: 8px 0;
     border-left: 3px solid transparent;
     border-radius: 6px;
-    font-size: 15px;
+    font-size: 14px;
     transition: 0.3s;
 }
 
 .sidebar a i {
-    margin-right: 12px;
-    font-size: 17px;
+    margin-right: 10px;
+    font-size: 16px;
 }
 
 .sidebar a:hover {
@@ -60,36 +61,41 @@ body, html {
 
 /* ==================== MAIN CONTENT ==================== */
 .main-content {
-    margin-left: 250px;
-    padding: 35px;
+    margin-left: 220px;
+    padding: 25px;
     flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* ==================== HERO SECTION ==================== */
 .hero-section {
-    min-height: 82vh;
+    min-height: 70vh;
     background: linear-gradient(110deg, #0a0e22, #19233b);
     text-align: center;
-    padding: 80px 30px;
-    border-radius: 15px;
-    box-shadow: 0 0 25px rgba(255, 235, 59, 0.07);
+    padding: 50px 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255, 235, 59, 0.07);
     border: 1px solid rgba(255, 255, 255, 0.05);
+    width: 100%;
+    max-width: 1000px;
 }
 
 .hero-section h1 {
-    font-size: 2.8em;
-    margin-bottom: 18px;
+    font-size: 2.2em;
+    margin-bottom: 12px;
     color: #ffeb3b;
-    text-shadow: 0 0 8px rgba(255, 235, 59, 0.5);
+    text-shadow: 0 0 6px rgba(255, 235, 59, 0.5);
 }
 
 .hero-section p {
-    font-size: 1.2em;
-    max-width: 725px;
-    margin: 0 auto 35px;
+    font-size: 1em;
+    max-width: 600px;
+    margin: 0 auto 25px;
     color: #c8d0e1;
-    line-height: 1.6;
-    opacity: 0.92;
+    line-height: 1.5;
+    opacity: 0.9;
 }
 
 /* ==================== CARDS ==================== */
@@ -97,74 +103,117 @@ body, html {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 25px;
+    gap: 18px;
     margin-top: 20px;
 }
 
 .card {
-    width: 200px;
-    height: 140px;
-    padding: 18px;
-    border-radius: 14px;
+    width: 160px;
+    height: 120px;
+    padding: 12px;
+    border-radius: 12px;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(9px);
+    backdrop-filter: blur(8px);
     cursor: pointer;
-    transition: 0.38s;
+    transition: 0.35s;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .card i {
-    font-size: 30px;
+    font-size: 26px;
     color: #ffeb3b;
+    transition: 0.3s;
 }
 
 .card p {
-    margin-top: 10px;
-    font-size: 16px;
+    margin-top: 8px;
+    font-size: 14px;
     color: #e3e9f5;
     font-weight: 600;
+    text-align: center;
 }
 
 .card:hover {
-    transform: translateY(-8px) scale(1.04);
+    transform: translateY(-6px) scale(1.04);
     border-color: #ffeb3b;
-    box-shadow: 0 0 15px rgba(255, 235, 59, 0.3);
+    box-shadow: 0 0 15px rgba(255, 235, 59, 0.35);
+}
+
+.card:hover i {
+    color: #fff176;
 }
 
 /* ==================== FOOTER ==================== */
 footer {
     margin-top: auto;
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     text-align: center;
     background: #11151f;
     border-top: 2px solid #1f2533;
     color: #b7bcc9;
-    font-size: 14px;
+    font-size: 13px;
+    position: relative;
 }
 
 footer a {
     color: #03e9f4;
     text-decoration: none;
+    transition: 0.3s;
 }
 
 footer a:hover {
     text-decoration: underline;
+    color: #00f0ff;
 }
 
 /* ==================== RESPONSIVE ==================== */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 180px;
+    }
+    .main-content {
+        margin-left: 180px;
+        padding: 20px;
+    }
+    .hero-section {
+        padding: 40px 20px;
+    }
+}
+
 @media (max-width: 768px) {
     .sidebar {
         width: 100%;
         height: auto;
         position: relative;
+        border-right: none;
+        border-bottom: 2px solid #1f2533;
+        display: flex;
+        justify-content: space-around;
+        padding: 12px 0;
+    }
+    .sidebar h2 {
+        display: none;
     }
     .main-content {
         margin-left: 0;
+        padding: 15px;
+        height: auto;
+    }
+    .buttons {
+        gap: 12px;
+    }
+    .card {
+        width: 130px;
+        height: 110px;
     }
     .hero-section h1 {
-        font-size: 2.2em;
+        font-size: 1.9em;
     }
 }
 
@@ -173,6 +222,6 @@ footer a:hover {
         width: 90%;
     }
     .hero-section h1 {
-        font-size: 1.8em;
+        font-size: 1.6em;
     }
 }
