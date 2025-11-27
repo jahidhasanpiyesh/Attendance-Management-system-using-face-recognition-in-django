@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authorize Student</title>
+ 
+    <link rel="stylesheet" href="{% static 'stu_authorize.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Authorization Panel</h1>
+        <div class="student-details">
+            <div class="detail"><strong>Name:</strong> {{ stu.name }}</div>
+            <div class="detail"><strong>Email:</strong> {{ stu.email }}</div>
+            <div class="detail"><strong>Phone Number:</strong> {{ stu.phone_number }}</div>
+            <div class="detail"><strong>Designation:</strong> {{ stu.designation }}</div>
+            <div class="detail"><strong>Department:</strong> {{ stu.department }}</div>
+            <div class="detail"><strong>Authorized:</strong> {% if stu.authorized %} Yes {% else %} No {% endif %}</div>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="checkbox" id="authorized" name="authorized" {% if stu.is_active %} checked {% endif %}>
+                <label for="authorized">Authorize Student </label>
+            </div>
+            <button type="submit">Update Authorization</button>
+        </form>
+        <div class="actions">
+            <a href="{% url 'stu_list' %}">Back to List</a>
+            <a href="">View Details</a>
+        </div>
+    </div>
+</body>
+</html>
