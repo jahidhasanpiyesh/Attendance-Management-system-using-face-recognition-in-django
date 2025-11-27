@@ -78,6 +78,11 @@ def user_login(request):
             messages.error(request, "Invalid username or password.")
     return render(request, 'login.html')
 
+# ----------------------------------------View for logging out the user---------------------------
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect('home')  # logout হলে login page এ redirect
 
 # ----------------------------------------View for rendering the student list page---------------------------
 @login_required
