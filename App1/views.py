@@ -102,9 +102,22 @@ def stu_authorize(request, pk):
         authorized = request.POST.get('authorized', False)
         stu.is_active = bool(authorized)  # Update the 'is_active' field
         stu.save()
-        return redirect('stu-detail', pk=pk)
+        return redirect('stu_detail', pk=pk)
     
     return render(request, 'stu_authorize.html', {'stu': stu})
+
+# ----------------------------------------View for deleting a student---------------------------
+@login_required
+@user_passes_test(is_admin)
+def stu_delete(request, pk):
+    stu = get_object_or_404(Student_Registration, pk=pk)
+    
+    if request.method == 'POST':
+        stu.delete()
+        messages.success(request, 'Student deleted successfully.')
+        return redirect('stu_list')  # Redirect to the student list after deletion
+    
+    return render(request, 'stu_delete.html', {'stu': stu})
 
 # ----------------------------------------View for rendering the student detail page---------------------------
 @login_required

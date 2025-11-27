@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>stuloy Details</h1>
+        <h1>Authorization Student Details</h1>
         <div class="student-details">
             <div class="detail"><strong>Name:</strong> {{ stu.name }}</div>
             <div class="detail"><strong>Email:</strong> {{ stu.email }}</div>
@@ -21,8 +21,8 @@
         </div>
         <div class="actions">
             <a href="{% url 'stu_list' %}">Back to List</a>
-            <a href="{% url 'stu-authorize' pk=stu.pk %}">Authorize</a>
-            <a href="">Delete</a> <!-- Add this line -->
+            <a href="{% url 'stu_authorize' pk=stu.pk %}">Authorize</a>
+            <a href="{% url 'stu_delete' pk=stu.pk %}">Delete</a> <!-- Add this line -->
         </div>
     </div>
 </body>

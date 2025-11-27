@@ -45,7 +45,7 @@
             <td>{{ stu.department }}</td>
             <td>{% if stu.is_active %} Yes {% else %} No {% endif %}</td>
             <td class="actions">
-              <a href="{% url 'stu-authorize' pk=stu.pk %}">View</a>
+              <a href="{% url 'stu_authorize' pk=stu.pk %}">View</a>
             </td>
           </tr>
           {% endfor %}
