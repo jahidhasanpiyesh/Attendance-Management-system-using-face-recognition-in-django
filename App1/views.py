@@ -161,3 +161,12 @@ def camera_config_create(request):
 
     # Render the camera configuration form for GET requests
     return render(request, 'camera_config_form.html')
+
+
+@login_required
+@user_passes_test(is_admin)
+def camera_config_list(request):
+    # Retrieve all CameraConfiguration objects from the database
+    configs = CameraConfiguration.objects.all()
+    # Render the list template with the retrieved configurations
+    return render(request, 'camera_config_list.html', {'configs': configs})

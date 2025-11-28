@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Configurations List</title>
+
+    <!-- Google Fonts for nice typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- CSS for styling the table and layout -->
+    <link rel="stylesheet" href="{% static 'camera_config_list.css' %}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Saved Camera Configurations</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Camera Source</th>
+                    <th>Threshold</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for config in configs %}
+                <tr>
+                    <td>{{ config.name }}</td>
+                    <td>{{ config.camera_source }}</td>
+                    <td>{{ config.threshold }}</td>
+                    <td>
+                        <a href="" style="color: #FFD700;">Edit</a> |
+                        <a href="" style="color: #FFD700;">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="" class="create-new-btn">Create New Configuration</a>
+        <a href="" class="back-home-btn">Back to Home</a> <!-- New Back to Home button -->
+    </div>
+
+</body>
+</html>
