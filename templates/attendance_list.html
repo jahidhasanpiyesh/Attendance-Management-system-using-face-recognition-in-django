@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Employee Attendance List</title>
+    <title>Students Attendance List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Font Awesome -->
     <link rel="stylesheet" href="{% static 'attendance_list.css' %}">
 </head>
 <body>
 <div class="container">
-    <h2 class="heading">Employee Attendance Records</h2>
+    <h2 class="heading">Students Attendance Records</h2>
     <form method="get" class="filter-container">
         <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Search for employees..." value="{{ search_query }}">
+            <input type="text" name="search" class="form-control" placeholder="Search for students..." value="{{ search_query }}">
             <div class="input-group-append">
                 <button class="btn btn-custom" type="submit"><i class="fas fa-search"></i> Search</button>
             </div>
@@ -38,9 +38,9 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Emp Image</th>
-                    <th>Emp Name</th>
-                    <th>Emp ID</th>
+                    <th>Stu Image</th>
+                    <th>Stu Name</th>
+                    <th>Stu ID</th>
                     <th>Attendance Date</th>
                     <th>Check-in Time</th>
                     <th>Check-out Time</th>
@@ -48,18 +48,18 @@
                 </tr>
             </thead>
             <tbody>
-                {% for data in employee_attendance_data %}
+                {% for data in students_attendance_data %}
                     {% for attendance in data.attendance_records %}
                     <tr>
                         <td>
-                            {% if data.employee.profile_picture %}
-                                <img src="{{ data.employee.profile_picture.url }}" alt="{{ data.employee.name }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                            {% if data.students.profile_picture %}
+                                <img src="{{ data.students.profile_picture.url }}" alt="{{ data.students.name }}" style="width: 50px; height: 50px; border-radius: 50%;">
                             {% else %}
                                 No Image
                             {% endif %}
                         </td>
-                        <td>{{ data.employee.name }}</td>
-                        <td>{{ data.employee.name }}</td>
+                        <td>{{ data.students.name }}</td>
+                        <td>{{ data.students.name }}</td>
                         <td>{{ attendance.date }}</td>
                         <td>
                             {% if attendance.check_in_time %}
