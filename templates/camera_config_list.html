@@ -33,7 +33,7 @@
                     <td>{{ config.camera_source }}</td>
                     <td>{{ config.threshold }}</td>
                     <td>
-                        <a href="" style="color: #FFD700;">Edit</a> |
+                        <a href="{% url 'camera_config_update' config.id %}" style="color: #FFD700;">Edit</a> |
                         <a href="" style="color: #FFD700;">Delete</a>
                     </td>
                 </tr>

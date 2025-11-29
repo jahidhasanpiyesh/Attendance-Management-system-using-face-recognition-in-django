@@ -170,3 +170,28 @@ def camera_config_list(request):
     configs = CameraConfiguration.objects.all()
     # Render the list template with the retrieved configurations
     return render(request, 'camera_config_list.html', {'configs': configs})
+
+
+# UPDATE: Function to edit an existing camera configuration
+@login_required
+@user_passes_test(is_admin)
+def camera_config_update(request, pk):
+    # Retrieve the specific configuration by primary key or return a 404 error if not found
+    config = get_object_or_404(CameraConfiguration, pk=pk)
+
+    # Check if the request method is POST, indicating form submission
+    if request.method == "POST":
+        # Update the configuration fields with data from the form
+        config.name = request.POST.get('name')
+        config.camera_source = request.POST.get('camera_source')
+        config.threshold = request.POST.get('threshold')
+        config.success_sound_path = request.POST.get('success_sound_path')
+
+        # Save the changes to the database
+        config.save()  
+
+        # Redirect to the list page after successful update
+        return redirect('camera_config_list')  
+    
+    # Render the configuration form with the current configuration data for GET requests
+    return render(request, 'camera_config_form.html', {'config': config})

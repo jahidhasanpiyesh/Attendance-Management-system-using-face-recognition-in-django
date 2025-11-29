@@ -14,4 +14,5 @@ urlpatterns = [
     path('attendance_list/', views.attendance_list, name='attendance_list'),
     path('camera_config/', views.camera_config_create, name='camera_config_create'),
     path('camera_config/list/', views.camera_config_list, name='camera_config_list'),
+    path('camera_config/update/<int:pk>/', views.camera_config_update, name='camera_config_update'),
 ]
