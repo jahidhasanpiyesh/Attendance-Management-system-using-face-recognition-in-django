@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Md Jahid Hasan\.vscode\Face_Recognition_Attendance_System\env
+set VIRTUAL_ENV=C:\Users\Md Jahid Hasan\.vscode\AutoAttend_AI\env
 
 if not defined PROMPT set PROMPT=$P$G
 
