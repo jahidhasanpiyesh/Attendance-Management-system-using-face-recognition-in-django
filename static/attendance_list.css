@@ -1,17 +1,19 @@
 /* =========================
-   GLOBAL STYLES
+   GLOBAL STYLES
 ========================= */
 html,
 body {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', 'Segoe UI', sans-serif;
-    background-color: #f4f6f9;
-    color: #333;
+    /* Dark body background */
+    background-color: #0c0f16;
+    /* Light text color */
+    color: #e3e9f5;
 }
 
 /* =========================
-   CONTAINER & HEADER
+   CONTAINER & HEADER
 ========================= */
 .container {
     padding: 25px 20px 40px;
@@ -21,14 +23,17 @@ body {
 .heading {
     text-align: center;
     margin: 25px 0 35px;
-    color: #0056b3;
+    /* Heading color: Yellow */
+    color: #ffeb3b;
     font-weight: 700;
     font-size: 1.9rem;
     letter-spacing: 0.5px;
+    /* Added text shadow for dark theme highlight */
+    text-shadow: 0 0 6px rgba(255, 235, 59, 0.5);
 }
 
 /* =========================
-   FILTER SECTION
+   FILTER SECTION
 ========================= */
 .filter-container {
     display: flex;
@@ -43,9 +48,14 @@ body {
 }
 
 .input-group .form-control {
+    /* Adjusted border-radius for input */
     border-radius: 6px 0 0 6px;
     height: 45px;
     font-size: 15px;
+    /* Input styles for dark theme */
+    background-color: #11151f;
+    color: #e3e9f5;
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .input-group .btn-custom,
@@ -57,37 +67,61 @@ body {
 }
 
 .btn-custom {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
+    /* Button background: Yellow */
+    background: #ffeb3b;
+    /* Button text color: Dark for contrast */
+    color: #0c0f16;
     border: none;
 }
 
 .btn-custom:hover {
-    background: linear-gradient(135deg, #0056b3, #003d82);
-    color: #fff;
+    /* Button hover: Lighter yellow */
+    background: #fff176;
+    color: #000;
 }
 
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #1e7e34;
+}
+
+
 /* =========================
-   TABLE STYLING
+   TABLE STYLING (UPDATED FOR CLARITY AND PROFESSIONAL LOOK)
 ========================= */
 .table-responsive {
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    /* Box shadow slightly softer but visible */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .table {
-    background: white;
+    /* Table background: Slightly lighter dark shade for better contrast with body */
+    background: #1a1e26;
     margin-bottom: 0;
+    color: #e3e9f5;
+    /* Ensures general text color is light */
 }
 
 .table thead th {
-    background: #0056b3;
-    color: white;
-    padding: 14px;
+    /* Header background: Darker shade to distinguish from table body */
+    background: #0c0f16;
+    /* Header text color: Bright yellow for key focus */
+    color: #ffeb3b;
+    padding: 16px 12px;
+    /* Increased padding for professional look */
     font-size: 15px;
+    font-weight: 700;
+    /* Bold header text */
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
+    /* Thick yellow border for separation */
+    border-bottom: 3px solid #ffeb3b;
 }
 
 .table tbody tr {
@@ -95,27 +129,54 @@ body {
 }
 
 .table tbody tr:hover {
-    background: #eef3f9;
+    /* Row hover: More pronounced yellow transparency */
+    background: rgba(255, 235, 59, 0.15);
 }
 
 .table td {
     vertical-align: middle;
     text-align: center;
-    padding: 12px;
+    padding: 14px 12px;
+    /* Adjusted padding */
     font-size: 15px;
+    /* Data Color: Explicitly set a light color for better readability */
+    color: #ffffff;
+    /* Subtle row divider */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* --- Specific Cell Color Adjustments for better data visibility (as per previous suggestion) --- */
+/* STU NAME and STU ID: Muted white for secondary data */
+.table td:nth-child(2),
+.table td:nth-child(3) {
+    font-weight: 500;
+    color: #e3e9f5;
+}
+
+/* Time Data (CHECK-IN, CHECK-OUT, STAYED TIME): Highlighted in yellow */
+.table td:nth-child(5),
+.table td:nth-child(6),
+.table td:nth-child(7) {
+    font-weight: 600;
+    color: #ffeb3b;
+}
+
 
 /* Employee Image */
 .table img {
-    width: 55px;
-    height: 55px;
+    width: 60px;
+    /* Slightly larger image */
+    height: 60px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #007bff33;
+    /* Image border: Solid yellow border for better focus */
+    border: 3px solid #ffeb3b;
+    box-shadow: 0 0 8px rgba(255, 235, 59, 0.3);
+    /* Subtle glow */
 }
 
 /* =========================
-   FOOTER BACK ICON
+   FOOTER BACK ICON
 ========================= */
 .footer {
     margin-top: 35px;
@@ -125,22 +186,26 @@ body {
 .back-icon {
     padding: 10px 15px;
     font-size: 1.6rem;
-    color: #007bff;
+    /* Icon color: Yellow */
+    color: #ffeb3b;
     cursor: pointer;
-    background: #fff;
+    /* Icon background: Dark transparency */
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 50%;
     transition: 0.3s ease-in-out;
-    border: 2px solid transparent;
+    /* Border color: Yellow */
+    border: 2px solid #ffeb3b;
 }
 
 .back-icon:hover {
-    color: #fff;
-    background: #0056b3;
-    border-color: #0056b3;
+    /* Hover background: Yellow */
+    color: #0c0f16;
+    background: #ffeb3b;
+    border-color: #ffeb3b;
 }
 
 /* =========================
-   RESPONSIVE DESIGN
+   RESPONSIVE DESIGN
 ========================= */
 @media (max-width: 768px) {
     .heading {
@@ -160,5 +225,10 @@ body {
         border-radius: 6px;
         width: 100%;
         margin-top: 5px;
+    }
+
+    /* Ensure form control border-radius is correct for single column */
+    .input-group .form-control {
+        border-radius: 6px;
     }
 }
