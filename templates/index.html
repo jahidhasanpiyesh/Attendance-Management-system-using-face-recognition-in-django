@@ -15,7 +15,7 @@
         <h2>AutoAttend_AI</h2>
         <a href="{% url 'register_stu' %}"><i class="fas fa-user-plus"></i> Students Registration</a>
         <a href="{% url 'stu_list' %}"><i class="fas fa-user-friends"></i> Authorize Students</a>
-        <a href=""><i class="fas fa-camera"></i> Mark Attendance</a>
+        <a href="{% url 'capture_and_recognize' %}"><i class="fas fa-camera"></i> Mark Attendance</a>
         <a href="{% url 'attendance_list' %}"><i class="fas fa-list"></i> Attendance Details</a>
         <a href="{% url 'camera_config_create' %}"><i class="fas fa-cog"></i> Camera Configuration</a>
     </div>
@@ -33,7 +33,7 @@
                     <p>Authorize Students</p>
                 </div>
                 <div class="card">
-                    <a href=""><i class="fas fa-camera"></i></a>
+                    <a href="{% url 'capture_and_recognize' %}"><i class="fas fa-camera"></i></a>
                     <p>Mark Attendance</p>
                 </div>
                 <div class="card">

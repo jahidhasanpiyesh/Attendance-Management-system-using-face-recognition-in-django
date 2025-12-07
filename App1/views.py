@@ -1,12 +1,80 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Student_Registration, CameraConfiguration
+from .models import Student_Registration, CameraConfiguration, Attendance
 from django.contrib import messages
 from django.core.files.base import ContentFile
 import base64
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.conf import settings
+from django.utils.timezone import now
+from facenet_pytorch import InceptionResnetV1, MTCNN
+
+import os
+import cv2
+import numpy as np
+import pygame
+import torch
+import mtcnn
+import threading
+import time
 # Create your views here.
+
+# Initialize MTCNN and InceptionResnetV1
+mtcnn = MTCNN(keep_all=True)
+resnet = InceptionResnetV1(pretrained='vggface2').eval()
+
+
+
+# Function to detect and encode faces
+def detect_and_encode(image):
+    with torch.no_grad():
+        boxes, _ = mtcnn.detect(image)
+        if boxes is not None:
+            faces = []
+            for box in boxes:
+                face = image[int(box[1]):int(box[3]), int(box[0]):int(box[2])]
+                if face.size == 0:
+                    continue
+                face = cv2.resize(face, (160, 160))
+                face = np.transpose(face, (2, 0, 1)).astype(np.float32) / 255.0
+                face_tensor = torch.tensor(face).unsqueeze(0)
+                encoding = resnet(face_tensor).detach().numpy().flatten()
+                faces.append(encoding)
+            return faces
+    return []
+
+# Function to encode uploaded images
+def encode_uploaded_images():
+    known_face_encodings = []
+    known_face_names = []
+
+    # Fetch only authorized images
+    uploaded_images = Student_Registration.objects.filter(is_active=True)
+
+    for student in uploaded_images:
+        image_path = os.path.join(settings.MEDIA_ROOT, str(student.profile_image.name))
+        known_image = cv2.imread(image_path)
+        known_image_rgb = cv2.cvtColor(known_image, cv2.COLOR_BGR2RGB)
+        encodings = detect_and_encode(known_image_rgb)
+        if encodings:
+            known_face_encodings.extend(encodings)
+            known_face_names.append(student.name)
+
+    return known_face_encodings, known_face_names
+
+
+# Function to recognize faces
+def recognize_faces(known_encodings, known_names, test_encodings, threshold=0.6):
+    recognized_names = []
+    for test_encoding in test_encodings:
+        distances = np.linalg.norm(known_encodings - test_encoding, axis=1)
+        min_distance_idx = np.argmin(distances)
+        if distances[min_distance_idx] < threshold:
+            recognized_names.append(known_names[min_distance_idx])
+        else:
+            recognized_names.append('Not Recognized')
+    return recognized_names
 
 # ----------------------------------------Helper function to check if user is admin---------------------------
 def is_admin(user):
@@ -107,6 +175,151 @@ def stu_authorize(request, pk):
     
     return render(request, 'stu_authorize.html', {'stu': stu})
 
+
+
+#####################################################################
+
+
+
+
+def capture_and_recognize(request):
+    stop_events = []  # List to store stop events for each thread
+    camera_threads = []  # List to store threads for each camera
+    camera_windows = []  # List to store window names
+    error_messages = []  # List to capture errors from threads
+
+    def process_frame(cam_config, stop_event):
+        """Thread function to capture and process frames for each camera."""
+        cap = None
+        window_created = False  # Flag to track if the window was created
+        try:
+            # Check if the camera source is a number (local webcam) or a string (IP camera URL)
+            if cam_config.camera_source.isdigit():
+                cap = cv2.VideoCapture(int(cam_config.camera_source))  # Use integer index for webcam
+            else:
+                cap = cv2.VideoCapture(cam_config.camera_source)  # Use string for IP camera URL
+
+            if not cap.isOpened():
+                raise Exception(f"Unable to access camera {cam_config.name}.")
+
+            threshold = cam_config.threshold
+
+            # Initialize pygame mixer for sound playback
+            pygame.mixer.init()
+            success_sound = pygame.mixer.Sound('App1/suc.wav')  # Load sound path
+
+            window_name = f'Face Recognition - {cam_config.name}'
+            camera_windows.append(window_name)  # Track the window name
+
+            while not stop_event.is_set():
+                ret, frame = cap.read()
+                if not ret:
+                    print(f"Failed to capture frame for camera: {cam_config.name}")
+                    break  # If frame capture fails, break from the loop
+
+                # Convert BGR to RGB
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                test_face_encodings = detect_and_encode(frame_rgb)  # Function to detect and encode face in frame
+
+                if test_face_encodings:
+                    known_face_encodings, known_face_names = encode_uploaded_images()  # Load known face encodings once
+                    if known_face_encodings:
+                        names = recognize_faces(np.array(known_face_encodings), known_face_names, test_face_encodings, threshold)
+
+                        for name, box in zip(names, mtcnn.detect(frame_rgb)[0]):
+                            if box is not None:
+                                (x1, y1, x2, y2) = map(int, box)
+                                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                                cv2.putText(frame, name, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
+                                if name != 'Not Recognized':
+                                    students = Student_Registration.objects.filter(name=name)
+                                    if students.exists():
+                                        student = students.first()
+
+                                        # Get current time
+                                        current_time = now()
+
+                                        # Manage attendance based on check-in and check-out logic
+                                        attendance, created = Attendance.objects.get_or_create(student_registration=student, date=now().date())
+                                        if created:
+                                            attendance.mark_check_in()
+                                            success_sound.play()
+                                            cv2.putText(frame, f"{name}, checked in.", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                                        else:
+                                            if attendance.check_in_time and not attendance.check_out_time:
+                                                # Check out logic: check if 1 minute has passed after check-in
+                                                time_diff = current_time - attendance.check_in_time
+                                                if time_diff.total_seconds() > 60:  # 1 minute after check-in
+                                                    attendance.mark_check_out()
+                                                    success_sound.play()
+                                                    cv2.putText(frame, f"{name}, checked out.", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                                                else:
+                                                    cv2.putText(frame, f"{name}, already checked in.", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+                                            elif attendance.check_in_time and attendance.check_out_time:
+                                                cv2.putText(frame, f"{name}, already checked out.", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+
+                # Display frame in separate window for each camera
+                if not window_created:
+                    cv2.namedWindow(window_name)  # Only create window once
+                    window_created = True  # Mark window as created
+
+                cv2.imshow(window_name, frame)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    stop_event.set()  # Signal the thread to stop when 'q' is pressed
+                    break
+
+        except Exception as e:
+            print(f"Error in thread for {cam_config.name}: {e}")
+            error_messages.append(str(e))  # Capture error message
+        finally:
+            if cap is not None:
+                cap.release()
+            if window_created:
+                cv2.destroyWindow(window_name)  # Only destroy if window was created
+
+    try:
+        # Get all camera configurations
+        cam_configs = CameraConfiguration.objects.all()
+        if not cam_configs.exists():
+            raise Exception("No camera configurations found. Please configure them in the admin panel.")
+
+        # Create threads for each camera configuration
+        for cam_config in cam_configs:
+            stop_event = threading.Event()
+            stop_events.append(stop_event)
+
+            camera_thread = threading.Thread(target=process_frame, args=(cam_config, stop_event))
+            camera_threads.append(camera_thread)
+            camera_thread.start()
+
+        # Keep the main thread running while cameras are being processed
+        while any(thread.is_alive() for thread in camera_threads):
+            time.sleep(1)  # Non-blocking wait, allowing for UI responsiveness
+
+    except Exception as e:
+        error_messages.append(str(e))  # Capture the error message
+    finally:
+        # Ensure all threads are signaled to stop
+        for stop_event in stop_events:
+            stop_event.set()
+
+        # Ensure all windows are closed in the main thread
+        for window in camera_windows:
+            if cv2.getWindowProperty(window, cv2.WND_PROP_VISIBLE) >= 1:  # Check if window exists
+                cv2.destroyWindow(window)
+
+    # Check if there are any error messages
+    if error_messages:
+        # Join all error messages into a single string
+        full_error_message = "\n".join(error_messages)
+        return render(request, 'error.html', {'error_message': full_error_message})  # Render the error page with message
+
+    return redirect('attendance_list')
+
+###########################################################################
+
+
 # ----------------------------------------View for deleting a student---------------------------
 @login_required
 @user_passes_test(is_admin)
@@ -129,7 +342,51 @@ def stu_detail(request, pk):
 
 # ----------------------------------------View for rendering the attendance list page---------------------------
 def attendance_list(request):
-    return render(request, 'attendance_list.html')
+    # Handle search and date filter from GET params
+    search_query = request.GET.get('search', '').strip()
+    date_filter = request.GET.get('attendance_date', '').strip()
+    download_report = request.GET.get('download_report', '')
+
+    students = Student_Registration.objects.all()
+    if search_query:
+        students = students.filter(name__icontains=search_query)  # you can extend to stu_id or email
+
+    students_attendance_data = []
+    for stu in students:
+        if date_filter:
+            attendance_qs = stu.attendances.filter(date=date_filter)
+        else:
+            attendance_qs = stu.attendances.all()
+
+        # Only include students with at least one attendance record
+        if attendance_qs.exists():
+            students_attendance_data.append({'students': stu, 'attendance_records': attendance_qs})
+
+    # If user requested a CSV download, generate and return it
+    if download_report.lower() == 'true':
+        import csv
+        from django.http import HttpResponse
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="attendance_report.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['Stu Name', 'Stu ID', 'Date', 'Check-in Time', 'Check-out Time', 'Stayed Time'])
+
+        for item in students_attendance_data:
+            stu = item['students']
+            for attendance in item['attendance_records']:
+                stayed = attendance.calculate_duration() if (attendance.check_in_time and attendance.check_out_time) else ''
+                writer.writerow([stu.name, stu.stu_id, attendance.date, attendance.check_in_time, attendance.check_out_time, stayed])
+
+        return response
+
+    context = {
+        'students_attendance_data': students_attendance_data,
+        'search_query': search_query,
+        'date_filter': date_filter,
+    }
+
+    return render(request, 'attendance_list.html', context)
 
 
 # ---------------------------------- view for rendering the camera_config_list template page ---------------------------
