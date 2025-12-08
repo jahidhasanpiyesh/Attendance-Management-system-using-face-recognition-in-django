@@ -2,25 +2,32 @@ from django.contrib import admin
 from .models import Student_Registration, CameraConfiguration, Attendance
 # Register your models here.
 
-
+# admin site customization for student registration model
 @admin.register(Student_Registration)
 class Student_Registration_Admin(admin.ModelAdmin):
-    list_display = ('stu_id', 'name', 'email', 'phone_number', 'designation', 'department', 'is_active')
+    list_display = ('stu_id', 'name', 'email', 'phone_number',
+                    'designation', 'department', 'is_active')
     search_fields = ('stu_id', 'name', 'email', 'department')
     list_filter = ('is_active', 'department', 'designation')
     ordering = ('stu_id',)
 
+# admin site customization for attendance model
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
-    list_display = ['student_registration', 'date', 'check_in_time', 'check_out_time']
+    list_display = ['student_registration',
+                    'date', 'check_in_time', 'check_out_time']
     list_filter = ['date']
-    search_fields = ['student_registration__name', 'student_registration__stu_id']
+    search_fields = ['student_registration__name',
+                     'student_registration__stu_id']
 
+    # make check-in and check out times read-only in admin
     def get_readonly_fields(self, request, obj=None):
         if obj:  # Editing an existing object
             return ['student_registration', 'date', 'check_in_time', 'check_out_time']
-        return ['date', 'check_in_time', 'check_out_time']  # Adding a new object
+        # Adding a new object
+        return ['date', 'check_in_time', 'check_out_time']
 
+    # prevent modification of check-in and check-out times via admin
     def save_model(self, request, obj, form, change):
         if change:  # Editing an existing object
             # Ensure check-in and check-out times cannot be modified via admin
@@ -29,6 +36,7 @@ class AttendanceAdmin(admin.ModelAdmin):
             obj.check_out_time = original.check_out_time
         super().save_model(request, obj, form, change)
 
+# admin site customization for camera configuration model
 @admin.register(CameraConfiguration)
 class CameraConfigurationAdmin(admin.ModelAdmin):
     list_display = ['name', 'camera_source', 'threshold']
