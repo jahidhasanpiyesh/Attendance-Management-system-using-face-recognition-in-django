@@ -22,6 +22,8 @@ class Student_Registration(models.Model):
         return f"{self.name} ({self.stu_id})"
 
 # model for attendance records
+
+
 class Attendance(models.Model):
     student_registration = models.ForeignKey(
         Student_Registration, on_delete=models.CASCADE, related_name='attendances')
@@ -68,9 +70,11 @@ class Attendance(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:  # Only on creation
             self.date = timezone.now().date()
-        super().save(*args, **kwargs) # call the real save() method
+        super().save(*args, **kwargs)  # call the real save() method
 
 # model for camera configuration
+
+
 class CameraConfiguration(models.Model):
     name = models.CharField(max_length=100, unique=True,
                             help_text="Give a name to this camera configuration")
