@@ -6,7 +6,8 @@
     font-family: "Poppins", sans-serif;
 }
 
-body, html {
+body,
+html {
     background: #0c0f16;
     color: #ffffff;
     min-height: 100vh;
@@ -177,10 +178,12 @@ footer a:hover {
     .sidebar {
         width: 180px;
     }
+
     .main-content {
         margin-left: 180px;
         padding: 20px;
     }
+
     .hero-section {
         padding: 40px 20px;
     }
@@ -197,21 +200,26 @@ footer a:hover {
         justify-content: space-around;
         padding: 12px 0;
     }
+
     .sidebar h2 {
         display: none;
     }
+
     .main-content {
         margin-left: 0;
         padding: 15px;
         height: auto;
     }
+
     .buttons {
         gap: 12px;
     }
+
     .card {
         width: 130px;
         height: 110px;
     }
+
     .hero-section h1 {
         font-size: 1.9em;
     }
@@ -221,6 +229,7 @@ footer a:hover {
     .card {
         width: 90%;
     }
+
     .hero-section h1 {
         font-size: 1.6em;
     }

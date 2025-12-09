@@ -7,7 +7,8 @@
 }
 
 body {
-    background-color: #0c0f16; /* Dark background like dashboard */
+    background-color: #0c0f16;
+    /* Dark background like dashboard */
     color: #ffffff;
     min-height: 100vh;
     display: flex;
@@ -36,7 +37,8 @@ body {
 h2.card-title {
     font-size: 2rem;
     font-weight: 700;
-    color: #ffeb3b; /* Dashboard highlight color */
+    color: #ffeb3b;
+    /* Dashboard highlight color */
     margin-bottom: 25px;
     text-align: center;
     text-shadow: 0 0 6px rgba(255, 235, 59, 0.5);
@@ -50,7 +52,8 @@ h2.card-title {
     overflow: hidden;
     border-radius: 1rem;
     margin-bottom: 20px;
-    background-color: #11151f; /* Dark container */
+    background-color: #11151f;
+    /* Dark container */
     border: 1px solid rgba(255, 235, 59, 0.2);
 }
 

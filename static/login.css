@@ -17,7 +17,8 @@ body {
 
 /* ================= LOGIN CONTAINER ================= */
 .login-container {
-    background: #1e1e1e; /* Dark Card */
+    background: #1e1e1e;
+    /* Dark Card */
     padding: 35px 30px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
@@ -32,7 +33,8 @@ body {
     top: 15px;
     left: 15px;
     font-size: 22px;
-    color: #FFD700; /* Gold neon */
+    color: #FFD700;
+    /* Gold neon */
     cursor: pointer;
     transition: color 0.3s;
 }

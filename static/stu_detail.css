@@ -20,7 +20,7 @@ body {
     padding: 30px;
     background: rgba(255, 255, 255, 0.06);
     border-radius: 1.2rem;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(6px);
 }
@@ -58,7 +58,8 @@ h1 {
     text-align: center;
 }
 
-.actions a, button[type="submit"] {
+.actions a,
+button[type="submit"] {
     display: inline-block;
     margin: 0 10px;
     padding: 10px 22px;
@@ -72,7 +73,8 @@ h1 {
     transition: 0.3s ease;
 }
 
-.actions a:hover, button[type="submit"]:hover {
+.actions a:hover,
+button[type="submit"]:hover {
     background-color: #ffeb3b;
     color: #0c0f16;
     box-shadow: 0 4px 15px rgba(255, 235, 59, 0.3);
@@ -99,10 +101,13 @@ input[type="checkbox"] {
     .container {
         padding: 20px;
     }
+
     h1 {
         font-size: 1.6rem;
     }
-    .actions a, button[type="submit"] {
+
+    .actions a,
+    button[type="submit"] {
         padding: 8px 15px;
         font-size: 0.85rem;
     }
