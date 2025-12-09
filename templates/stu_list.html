@@ -2,69 +2,62 @@
 {% load static %}
 
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Students List</title>
-    <!-- Include necessary CSS -->
-    <link
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <!-- Font Awesome CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    />
-    <link rel="stylesheet" href="{% static 'stu_list.css' %}" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>Students List</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Student ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Designation</th>
-            <th>Department</th>
-            <th>Authorized</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for stu in students %}
-          <tr>
-            <td>{{ stu.stu_id }}</td>
-            <td>{{ stu.name }}</td>
-            <td>{{ stu.email }}</td>
-            <td>{{ stu.phone_number }}</td>
-            <td>{{ stu.designation }}</td>
-            <td>{{ stu.department }}</td>
-            <td>{% if stu.is_active %} Yes {% else %} No {% endif %}</td>
-            <td class="actions">
-              <a href="{% url 'stu_authorize' pk=stu.pk %}">View</a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    <!-- Back to home icon -->
-    <!-- Back to home icon -->
-    <div class="footer" onclick="location.href='{% url 'home' %}'">
-      <i class="fas fa-home"></i> Back to Home
-    </div>
 
-    <!-- Logout button shifted right -->
-    <div
-      class="footer"
-      onclick="location.href='{% url 'user_logout' %}'"
-      style="left: 240px"
-    >
-      <i class="fas fa-sign-out-alt"></i> Logout
-    </div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Students List</title>
+  <!-- Include necessary CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link rel="stylesheet" href="{% static 'stu_list.css' %}" />
+</head>
+
+<body>
+  <div class="container">
+    <h1>Students List</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Student ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Designation</th>
+          <th>Department</th>
+          <th>Authorized</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for stu in students %}
+        <tr>
+          <td>{{ stu.stu_id }}</td>
+          <td>{{ stu.name }}</td>
+          <td>{{ stu.email }}</td>
+          <td>{{ stu.phone_number }}</td>
+          <td>{{ stu.designation }}</td>
+          <td>{{ stu.department }}</td>
+          <td>{% if stu.is_active %} Yes {% else %} No {% endif %}</td>
+          <td class="actions">
+            <a href="{% url 'stu_authorize' pk=stu.pk %}">View</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <!-- Back to home icon -->
+  <!-- Back to home icon -->
+  <div class="footer" onclick="location.href='{% url 'home' %}'">
+    <i class="fas fa-home"></i> Back to Home
+  </div>
+
+  <!-- Logout button shifted right -->
+  <div class="footer" onclick="location.href='{% url 'user_logout' %}'" style="left: 240px">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </div>
+</body>
+
 </html>

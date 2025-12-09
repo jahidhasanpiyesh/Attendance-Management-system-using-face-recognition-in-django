@@ -2,6 +2,7 @@
 {% load static %}
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,33 +14,38 @@
     <!-- CSS for styling the form -->
     <link rel="stylesheet" href="{% static 'camera_config_form.css' %}">
 </head>
+
 <body>
     <div class="form-container">
         <h1>{{ config.name|default:"Create Camera Configuration" }}</h1>
-        
+
         <!-- Display messages here -->
         {% for message in messages %}
-            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                {{ message }}
-            </div>
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
         {% endfor %}
-        
+
         <form method="POST">
             {% csrf_token %}
-            
+
             <label for="name">Camera Name:</label>
-            <input type="text" id="name" name="name" value="{{ config.name|default:'' }}" placeholder="Enter camera name" required>
-            
+            <input type="text" id="name" name="name" value="{{ config.name|default:'' }}"
+                placeholder="Enter camera name" required>
+
             <label for="camera_source">Camera Source:</label>
-            <input type="text" id="camera_source" name="camera_source" value="{{ config.camera_source|default:'' }}" placeholder="Enter 0 for default or IP camera URL (e.g., http://10.129.101.122:4747/video)" required>
-            
+            <input type="text" id="camera_source" name="camera_source" value="{{ config.camera_source|default:'' }}"
+                placeholder="Enter 0 for default or IP camera URL (e.g., http://10.129.101.122:4747/video)" required>
+
             <label for="threshold">Threshold:</label>
-            <input type="number" step="0.01" id="threshold" name="threshold" value="{{ config.threshold|default:0.6 }}" placeholder="Enter threshold value (0.0 to 1.0)" required>
+            <input type="number" step="0.01" id="threshold" name="threshold" value="{{ config.threshold|default:0.6 }}"
+                placeholder="Enter threshold value (0.0 to 1.0)" required>
             <button type="submit">Save</button>
         </form>
-        
+
         <button class="nav-button" onclick="location.href='{% url 'camera_config_list' %}'">Back to List</button>
         <button class="nav-button" onclick="location.href='{% url 'home' %}'">Back to Home</button>
     </div>
 </body>
+
 </html>

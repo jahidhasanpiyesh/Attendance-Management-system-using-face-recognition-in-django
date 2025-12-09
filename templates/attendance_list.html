@@ -1,61 +1,67 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Students Attendance List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="{% static 'attendance_list.css' %}">
 </head>
+
 <body>
-<div class="container">
-    <h2 class="heading">Students Attendance Records</h2>
-    <form method="get" class="filter-container">
-        <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Search for students..." value="{{ search_query }}">
-            <div class="input-group-append">
-                <button class="btn btn-custom" type="submit"><i class="fas fa-search"></i> Search</button>
+    <div class="container">
+        <h2 class="heading">Students Attendance Records</h2>
+        <form method="get" class="filter-container">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search for students..."
+                    value="{{ search_query }}">
+                <div class="input-group-append">
+                    <button class="btn btn-custom" type="submit"><i class="fas fa-search"></i> Search</button>
+                </div>
             </div>
-        </div>
-        <div class="input-group">
-            <input type="date" name="attendance_date" class="form-control" value="{{ date_filter }}">
-            <div class="input-group-append">
-                <button class="btn btn-custom" type="submit"><i class="fas fa-calendar-alt"></i> Filter</button>
+            <div class="input-group">
+                <input type="date" name="attendance_date" class="form-control" value="{{ date_filter }}">
+                <div class="input-group-append">
+                    <button class="btn btn-custom" type="submit"><i class="fas fa-calendar-alt"></i> Filter</button>
+                </div>
             </div>
-        </div>
-        <!-- Download Button -->
-        <div class="input-group">
-            <a href="?download_report=true&search={{ search_query }}&attendance_date={{ date_filter }}" class="btn btn-success">
-                <i class="fas fa-download"></i> Download Report
-            </a>
-        </div>
-    </form>
-    
-    <!-- Attendance Table -->
-    <div class="table-responsive attendance-table">
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Stu Image</th>
-                    <th>Stu Name</th>
-                    <th>Stu ID</th>
-                    <th>Attendance Date</th>
-                    <th>Check-in Time</th>
-                    <th>Check-out Time</th>
-                    <th>Stayed Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for data in students_attendance_data %}
+            <!-- Download Button -->
+            <div class="input-group">
+                <a href="?download_report=true&search={{ search_query }}&attendance_date={{ date_filter }}"
+                    class="btn btn-success">
+                    <i class="fas fa-download"></i> Download Report
+                </a>
+            </div>
+        </form>
+
+        <!-- Attendance Table -->
+        <div class="table-responsive attendance-table">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Stu Image</th>
+                        <th>Stu Name</th>
+                        <th>Stu ID</th>
+                        <th>Attendance Date</th>
+                        <th>Check-in Time</th>
+                        <th>Check-out Time</th>
+                        <th>Stayed Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in students_attendance_data %}
                     {% for attendance in data.attendance_records %}
                     <tr>
                         <td>
                             {% if data.students.profile_image %}
-                                <img src="{{ data.students.profile_image.url }}" alt="{{ data.students.name }}" style="width: 50px; height: 50px; border-radius: 50%;">
+                            <img src="{{ data.students.profile_image.url }}" alt="{{ data.students.name }}"
+                                style="width: 50px; height: 50px; border-radius: 50%;">
                             {% else %}
-                                No Image
+                            No Image
                             {% endif %}
                         </td>
                         <td>{{ data.students.name }}</td>
@@ -63,38 +69,39 @@
                         <td>{{ attendance.date }}</td>
                         <td>
                             {% if attendance.check_in_time %}
-                                {{ attendance.check_in_time|date:"h:i:s A" }}
+                            {{ attendance.check_in_time|date:"h:i:s A" }}
                             {% else %}
-                                Not Checked In
+                            Not Checked In
                             {% endif %}
                         </td>
                         <td>
                             {% if attendance.check_out_time %}
-                                {{ attendance.check_out_time|date:"h:i:s A" }}
+                            {{ attendance.check_out_time|date:"h:i:s A" }}
                             {% else %}
-                                Not Checked Out
+                            Not Checked Out
                             {% endif %}
                         </td>
                         <td>
                             {% if attendance.check_in_time and attendance.check_out_time %}
-                                {{ attendance.calculate_duration }}
+                            {{ attendance.calculate_duration }}
                             {% else %}
-                                Not Checked Out
+                            Not Checked Out
                             {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-    <div class="footer">
-        <i class="fas fa-arrow-left back-icon" onclick="location.href='/'"></i> <!-- Font Awesome back icon -->
+        <div class="footer">
+            <i class="fas fa-arrow-left back-icon" onclick="location.href='/'"></i> <!-- Font Awesome back icon -->
+        </div>
     </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
