@@ -228,12 +228,6 @@ Steps to contribute:
 
 ---
 
-## 📄 License
-
-This project is open-source and available under the **MIT License**.
-
----
-
 ---
 
 ## ⚠️ Python Version Requirement (Important)
@@ -498,7 +492,19 @@ You can upload your preferred logo OR I can design a simple one such as:
 Upload an image OR tell me your style, and I will generate the logo.
 
 ---
+## 🛡️ License
 
+This project is licensed under the **GNU General Public License v3.0**. 
+
+### ⚖️ Permissions under GPLv3:
+* **Commercial Use:** You can use this software for commercial purposes.
+* **Modification:** You can modify the code, but you must keep the source code open.
+* **Distribution:** You can distribute the original or modified code.
+* **Credit:** You must give credit to the original author (Md Jahid Hasan).
+
+See the [LICENSE](LICENSE) file for more details.
+
+---
 ## 👤 Author
 
 - Developer: Md Jahid Hasan  
